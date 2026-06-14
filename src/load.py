@@ -31,7 +31,11 @@ def load(datasets: dict, connection_string: str) -> None:
             df.to_sql(
                 name=table,
                 con=engine,
+<<<<<<< HEAD
                 if_exists="append",
+=======
+                if_exists="append"
+>>>>>>> 7312961f8cc2e6d19a6022c4e3e5a6d6df507f1b
                 index=False,
                 chunksize=1000,
             )
