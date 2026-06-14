@@ -38,6 +38,7 @@ pipeline-etl-integracion/
 │   ├── load.py           # Módulo de carga a MySQL
 │   └── main.py           # Orquestador del pipeline
 │
+├── images/               # Capturas del proceso y resultados
 ├── .gitignore
 ├── requirements.txt
 └── README.md
@@ -51,7 +52,7 @@ pipeline-etl-integracion/
 Lee los 9 CSVs de Olist desde `data/raw/` con Pandas. Registra cantidad de registros y columnas por archivo.
 
 **2. Transform — `transform.py`**  
-Limpieza y normalización de cada tabla: eliminación de duplicados, manejo de nulos, conversión de fechas, estandarización de columnas. Join entre tablas para construir el modelo destino.
+Limpieza y normalización de cada tabla: eliminación de duplicados, manejo de nulos, conversión de fechas, estandarización de columnas.
 
 **3. Load — `load.py`**  
 Conecta a MySQL con SQLAlchemy. Desactiva foreign keys temporalmente para respetar el orden de carga. Valida DataFrames antes de cargar, elimina duplicados y registra cada operación con logging. Manejo de errores con rollback automático.
@@ -63,18 +64,45 @@ Orquesta el pipeline completo — llama extract → transform → load en secuen
 
 ## Modelo de datos
 
-8 tablas relacionales cargadas en MySQL:
+8 tablas relacionales cargadas en MySQL con integridad referencial mediante foreign keys.
 
-| Tabla | Registros |
-|---|---|
-| customers | 99,441 |
-| sellers | 3,095 |
-| products | 32,951 |
-| product_categories | 71 |
-| orders | 99,441 |
-| order_items | 112,650 |
-| order_payments | 103,886 |
-| order_reviews | 98,410 |
+![Modelo relacional](images/diagramabd.png)
+
+---
+
+## Ejecución del pipeline
+
+Log completo de la ejecución — extract, transform y load con registros procesados por tabla.
+
+![Log del pipeline](images/pipeline.png)
+
+---
+
+## Validación en MySQL
+
+### Tablas creadas
+
+![Show Tables](images/02_show_tables.png)
+
+### Conteo de registros por tabla
+
+![Conteo registros](images/03_conteo_registros.png)
+
+---
+
+## Análisis exploratorio post-carga
+
+### Top 10 categorías por ingresos
+
+![Top categorías](images/04_top_categorias.png)
+
+### Distribución de métodos de pago
+
+![Distribución pagos](images/05_distribucion_pagos.png)
+
+### Promedio de review score por categoría
+
+![Review score](images/06_review_score.png)
 
 ---
 
@@ -120,9 +148,3 @@ python main.py
 - Logging con timestamps y duración por etapa
 
 ---
-
-## Autor
-
-**Leonardo Latorre**  
-Analista de Datos Junior | Business Intelligence | Data Integration | Data Engineer  
-Lima, Perú
